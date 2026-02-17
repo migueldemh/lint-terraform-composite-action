@@ -32,4 +32,3 @@ jobs:
 | `tflint-version`          | `false`   | `0.60.0`           | The version of TFLint to use when running `tflint`.                        |
 | `hcp-terraform-hostname`  | `false`   | `app.terraform.io` | The hostname of the HCP Terraform organization storing private modules.    |
 | `hcp-terraform-api-token` | `false`   |                    | The API token used to lint Terraform modules in a Private Module Registry. |
-| `shellcheck-enabled`      | `false`   | `false`            | Enable ShellCheck linting for shell scripts in the repository.             |

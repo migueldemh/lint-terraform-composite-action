@@ -18,10 +18,6 @@ inputs:
   hcp-terraform-api-token:
     description: The API token used to lint Terraform modules in a Private Module Registry.
     required: false
-  shellcheck-enabled:
-    description: Enable ShellCheck linting for shell scripts in the repository.
-    default: "false"
-    required: false
 
 runs:
   using: composite
@@ -41,13 +37,6 @@ runs:
       with:
         tflint_version: v${{ inputs.tflint-version }}
 
-    - name: Install ShellCheck
-      if: inputs.shellcheck-enabled == 'true'
-      run: |-
-        sudo apt-get update
-        sudo apt-get install --yes shellcheck
-      shell: sh
-
     - name: Export HCP Terraform Token
       if: inputs.hcp-terraform-api-token
       run: ${{ github.action_path }}/src/export_hcp_terraform_token.sh
@@ -61,17 +50,4 @@ runs:
         terraform init -backend=false
         tflint --init
         tflint --recursive --format=compact
-      shell: sh
-
-    - name: Lint Shell Scripts
-      if: inputs.shellcheck-enabled == 'true'
-      run: |-
-        shell_scripts=$(find . -type f -name "*.sh" -not -path "*/.terraform/*")
-
-        if [ -z "$shell_scripts" ]; then
-          echo "No shell scripts found. Skipping ShellCheck."
-          exit 0
-        fi
-
-        echo "$shell_scripts" | xargs shellcheck -x
       shell: sh
